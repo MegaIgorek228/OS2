@@ -9,6 +9,7 @@
 #include <sys/wait.h>
 
 int main(void) {
+    printf("[parent] PID=%d\n", getpid());
     char filename[4096];
 
     printf("Имя файла для записи: ");
@@ -51,8 +52,8 @@ int main(void) {
         close(pipe2[0]); close(pipe2[1]);
         close(fd);
 
-        char *args[] = {"./child", filename, NULL};
-        execv("./child", args);
+        char *args[] = {"./cmake-build-debug/child", filename, NULL};
+        execv("./cmake-build-debug/child", args);
         perror("execv");
         _exit(1);
     }
@@ -114,9 +115,7 @@ int main(void) {
         return 1;
     }
     if (WIFEXITED(status)) {
-        printf("\n[parent] Ребёнок завершился с кодом %d\n",
-               WEXITSTATUS(status));
+        printf("\n[parent] Ребёнок завершился с кодом %d\n", WEXITSTATUS(status));
     }
-
     return 0;
 }
